@@ -1,46 +1,116 @@
-// Prisma Client 생성 설정
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
 }
 
-// 데이터베이스 연결 설정
 datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  nickname String @unique
+  password String
+  image    String? @default("/assets/icons/profile/ic_profile_lg.svg")
+
+  articles        Article[]
+  articleComments ArticleComment[]
+  articleLikes    ArticleLike[]
+
+  products        Product[]
+  productComments ProductComment[]
+  productLikes    ProductLike[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Article {
-  id        Int              @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   title     String
   content   String
-  comments  ArticleComment[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  image     String[]
+  viewCount Int     @default(0)
+
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  comments ArticleComment[]
+  likes    ArticleLike[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId])
 }
 
 model ArticleComment {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   content   String
   articleId Int
-  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([authorId])
+}
+
+model ArticleLike {
+  id        Int     @id @default(autoincrement())
+  articleId Int
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([articleId, userId])
 }
 
 model Product {
-  id        Int              @id @default(autoincrement())
-  name     String
-  description   String
-  comments  ProductComment[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  image       String[]
+  viewCount   Int      @default(0)
+  authorId    Int
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  tags        String[]
+
+  comments ProductComment[]
+  likes    ProductLike[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId])
 }
 
 model ProductComment {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   content   String
   productId Int
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([authorId])
+}
+
+model ProductLike {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, userId])
 }

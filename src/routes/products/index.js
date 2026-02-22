@@ -1,6 +1,6 @@
 import express from 'express';
-import { productCommentsRouter } from './productComments.routes.js';
+import { productsRouter } from './products.routes.js';
 
 export const productRouter = express.Router();
 
-productRouter.use('/:productId/comments', productCommentsRouter); 
+productRouter.use('/', productsRouter);
