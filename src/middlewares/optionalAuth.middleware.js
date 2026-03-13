@@ -1,4 +1,31 @@
-// 로그인/비로그인 구별용 (상세 조회 등)
-// -> 로그인 안 해도 통과시키되, 로그인했다면 좋아요 여부 등을 위해 유저 정보를 채워줌
-// ex. 로그인 안해도 글을 볼수는 있는데 좋아요 같은건 못함
-// ex. 로그인 하면 내 글 아닌 것에 좋아요 등의 흔적을 남기고 확인까지 가능
+import { verifyToken } from '#utils';
+import { prisma } from '#db/prisma.js';
+
+export const optionalAuthMiddleware = async (req, res, next) => {
+  try {
+    const {accessToken} = req.cookies;
+
+    if (!accessToken) {
+      req.user = null;
+      return next();
+    }
+
+    const payload = verifyToken(accessToken, 'access');
+
+    if (!payload) {
+      req.user = null;
+      return next();
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: { id: true, email: true, nickname: true },
+    });
+
+    req.user = user || null;
+    next();
+  } catch (_error) {
+    req.user = null
+    next()
+  }
+}
