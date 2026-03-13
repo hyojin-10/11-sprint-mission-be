@@ -8,9 +8,9 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  nickname String @unique
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  nickname String  @unique
   password String
   image    String? @default("/assets/icons/profile/ic_profile_lg.svg")
 
@@ -27,14 +27,13 @@ model User {
 }
 
 model Article {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   title     String
   content   String
   image     String[]
-  viewCount Int     @default(0)
-
+  likeCount Int      @default(0)
   authorId  Int
-  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   comments ArticleComment[]
   likes    ArticleLike[]
@@ -71,15 +70,15 @@ model ArticleLike {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String
-  price       Int
-  image       String[]
-  viewCount   Int      @default(0)
-  authorId    Int
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  tags        String[]
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String
+  price         Int
+  image         String[]
+  favoriteCount Int      @default(0)
+  authorId      Int
+  author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  tags          String[]
 
   comments ProductComment[]
   likes    ProductLike[]

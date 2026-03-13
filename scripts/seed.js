@@ -28,7 +28,7 @@ const makeProducts = (authorId) => ({
   description: faker.commerce.productDescription(),
   price: randomInt(1000, 100000),
   image: xs(randomInt(1, 3)).map(() => faker.image.url()), // 이미지 0~3개
-  viewCount: randomInt(0, 500),
+  favoriteCount: 0,
   tags: xs(randomInt(0, 3)).map(() => faker.commerce.department()),
   authorId,
   createdAt: faker.date.past(), // 1년 이내
@@ -38,7 +38,7 @@ const makeArticles = (authorId) => ({
   title: faker.lorem.sentence({ min: 3, max: 6 }),
   content: faker.lorem.paragraphs(randomInt(1, 4)),
   image: xs(randomInt(0, 3)).map(() => faker.image.url()),
-  viewCount: randomInt(0, 500),
+  likeCount: 0,
   authorId,
   createdAt: faker.date.past(),
 });
@@ -110,7 +110,13 @@ const seedArticlesWithDetails = async (prisma, users) => {
           const likeDatas = likingUsers.map((user) =>
             makeLikes(article.id, user.id, 'article'),
           );
-          await prisma.articleLike.createMany({ data: likeDatas });
+          await prisma.$transaction([
+            prisma.articleLike.createMany({ data: likeDatas }),
+            prisma.article.update({
+              where: { id: article.id },
+              data: { likeCount: likeCount },
+            }),
+          ]);
         }
       }),
     );
@@ -146,7 +152,13 @@ const seedProductsWithDetails = async (prisma, users) => {
           const likeDatas = likingUsers.map((user) =>
             makeLikes(product.id, user.id, 'product'),
           );
-          await prisma.productLike.createMany({ data: likeDatas });
+          await prisma.$transaction([
+            prisma.productLike.createMany({ data: likeDatas }),
+            prisma.product.update({
+              where: { id: product.id },
+              data: { favoriteCount: likeCount },
+            }),
+          ]);
         }
       }),
     );
