@@ -1,5 +1,5 @@
 import { prisma } from '#db/prisma.js';
-import { ARTICLE_BEST, ARTICLE_PAGELIMIT } from '#constants';
+import { ARTICLE_BEST, ARTICLE_PAGELIMIT } from '../common/constants/index.js';
 
 // 게시글 생성
 function createArticle(data) {

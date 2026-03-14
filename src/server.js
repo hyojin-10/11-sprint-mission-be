@@ -2,7 +2,7 @@ import express from 'express';
 import { prisma } from '#db/prisma.js';
 import { config, isDevelopment } from '#config';
 import cookieParser from 'cookie-parser';
-import { router as apiRouter } from './routes/index.js';
+import { router as apiRouter } from './services/index.js';
 import { cors, errorHandler, logger } from '#middlewares';
 import { setupGracefulShutdown } from '#utils';
 

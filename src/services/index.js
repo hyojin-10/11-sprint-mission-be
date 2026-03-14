@@ -1,4 +1,4 @@
-import { HTTP_STATUS } from '#constants';
+import { HTTP_STATUS } from '../common/constants/index.js';
 import express from 'express';
 import { userRouter } from './users/index.js';
 import { articleRouter } from './articles/index.js';

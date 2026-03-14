@@ -1,5 +1,9 @@
 import { Prisma } from '#generated/prisma/client.ts';
-import { ERROR_MESSAGE, HTTP_STATUS, PRISMA_ERROR } from '#constants';
+import {
+  ERROR_MESSAGE,
+  HTTP_STATUS,
+  PRISMA_ERROR,
+} from '#constants';
 import { HttpException } from '#exceptions';
 
 export const errorHandler = (err, req, res, _next) => {

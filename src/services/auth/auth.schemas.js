@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ERROR_MESSAGE } from '#constants';
+import { ERROR_MESSAGE } from '../../common/constants/index.js';
 
 // 회원가입 스키마
 export const signUpSchema = z.object({

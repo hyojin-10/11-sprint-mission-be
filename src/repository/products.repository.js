@@ -1,5 +1,5 @@
 import { prisma } from '#db/prisma.js';
-import { PRODUCT_BEST, PRODUCT_PAGELIMIT } from '#constants';
+import { PRODUCT_BEST, PRODUCT_PAGELIMIT } from '../common/constants/index.js';
 
 // 상품 생성
 function createProduct(data) {

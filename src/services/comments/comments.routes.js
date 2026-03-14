@@ -1,9 +1,13 @@
 import express from 'express';
 import { commentsRepository } from '#repository';
-import { ERROR_MESSAGE, HTTP_STATUS } from '#constants';
+import { ERROR_MESSAGE, HTTP_STATUS } from '../../common/constants/index.js';
 import { authMiddleware, validate } from '#middlewares';
 import { ForbiddenException, NotFoundException } from '#exceptions';
-import { commentListParamSchema, commentParamSchema, commentSchema } from './comments.schema.js';
+import {
+  commentListParamSchema,
+  commentParamSchema,
+  commentSchema,
+} from './comments.schema.js';
 
 export const commentsRouter = express.Router();
 

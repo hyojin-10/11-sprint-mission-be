@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE } from '#constants';
+import { ERROR_MESSAGE } from '../../common/constants/index.js';
 import { z } from 'zod';
 
 // ID 파라미터 검증 스키마

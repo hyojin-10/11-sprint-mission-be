@@ -4,7 +4,11 @@ import {
   likesRepository,
   productsRepository,
 } from '#repository';
-import { ERROR_MESSAGE, HTTP_STATUS, PRODUCT_PAGELIMIT } from '#constants';
+import {
+  ERROR_MESSAGE,
+  HTTP_STATUS,
+  PRODUCT_PAGELIMIT,
+} from '../../common/constants/index.js';
 import { authMiddleware, validate } from '#middlewares';
 import { ForbiddenException, NotFoundException } from '#exceptions';
 import {

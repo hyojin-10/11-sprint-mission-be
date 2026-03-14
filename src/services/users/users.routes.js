@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import { usersRepository } from '#repository';
-import { ERROR_MESSAGE, HTTP_STATUS } from '#constants';
+import { ERROR_MESSAGE, HTTP_STATUS } from '../../common/constants/index.js';
 import { authMiddleware, validate } from '#middlewares';
 import { ForbiddenException, NotFoundException } from '#exceptions';
 import {

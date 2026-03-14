@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ERROR_MESSAGE } from '#constants';
+import { ERROR_MESSAGE } from '../../common/constants/index.js';
 
 export const commentParamSchema = z.object({
   id: z.coerce.number().int().positive(),

@@ -4,7 +4,11 @@ import {
   commentsRepository,
   likesRepository,
 } from '#repository';
-import { ARTICLE_PAGELIMIT, ERROR_MESSAGE, HTTP_STATUS } from '#constants';
+import {
+  ARTICLE_PAGELIMIT,
+  ERROR_MESSAGE,
+  HTTP_STATUS,
+} from '../../common/constants/index.js';
 import { authMiddleware, validate } from '#middlewares';
 import { ForbiddenException, NotFoundException } from '#exceptions';
 import {
