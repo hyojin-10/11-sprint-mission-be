@@ -1,82 +1,86 @@
-import { prisma } from '#db/prisma.js';
+export class CommentRepository {
+  #prisma;
 
-const getTargetModel = (type) => {
-  const isArticle = type === 'article';
+  constructor({ prisma }) {
+    this.#prisma = prisma;
+  }
 
-  return {
-    model: isArticle ? prisma.articleComment : prisma.productComment,
-    idField: isArticle ? 'articleId' : 'productId',
-  };
-};
+  #getTargetModel(type) {
+    const isArticle = type === 'article';
 
-// 댓글 목록 조회
-function findCommentsByTargetId(type, targetId) {
-  const { model, idField } = getTargetModel(type);
+    return {
+      model: isArticle
+        ? this.#prisma.articleComment
+        : this.#prisma.productComment,
+      idField: isArticle ? 'articleId' : 'productId',
+    };
+  }
 
-  return model.findMany({
-    where: {
-      [idField]: Number(targetId),
-    },
-    orderBy: { createdAt: 'asc' },
-    include: {
-      author: {
-        select: {
-          nickname: true,
-          image: true,
+  findByTargetId(type, targetId) {
+    const { model, idField } = this.#getTargetModel(type);
+
+    return model.findMany({
+      where: {
+        [idField]: Number(targetId),
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+      include: {
+        author: {
+          select: {
+            nickname: true,
+            image: true,
+          },
         },
       },
-    },
-  });
-}
+    });
+  }
 
-// 댓글 생성
-function createComment(type, data) {
-  const { model } = getTargetModel(type);
+  findById(type, id) {
+    const { model } = this.#getTargetModel(type);
 
-  return model.create({
-    data,
-    include: {
-      author: {
-        select: {
-          nickname: true,
-          image: true,
+    return model.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+  }
+
+  create(type, data) {
+    const { model } = this.#getTargetModel(type);
+
+    return model.create({
+      data,
+      include: {
+        author: {
+          select: {
+            nickname: true,
+            image: true,
+          },
         },
       },
-    },
-  });
+    });
+  }
+
+  update(type, id, data) {
+    const { model } = this.#getTargetModel(type);
+
+    return model.update({
+      where: {
+        id: Number(id),
+      },
+      data,
+    });
+  }
+
+  delete(type, id) {
+    const { model } = this.#getTargetModel(type);
+
+    return model.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+  }
 }
-
-// 권한 체크용 댓글 하나
-function findCommentById(type, id) {
-  const { model } = getTargetModel(type);
-
-  return model.findUnique({
-    where: { id: Number(id) },
-  });
-}
-
-// 댓글 수정
-function updateComment(type, id, data) {
-  const { model } = getTargetModel(type);
-
-  return model.update({
-    where: { id: Number(id) },
-    data,
-  });
-}
-
-// 댓글 삭제
-function deleteComment(type, id) {
-  const { model } = getTargetModel(type);
-  return model.delete({
-    where: { id: Number(id) },
-  });
-}
-
-export const commentsRepository = {
-  findCommentsByTargetId,
-  createComment,
-  findCommentById,
-  updateComment,
-  deleteComment,
-};

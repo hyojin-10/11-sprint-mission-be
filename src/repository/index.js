@@ -1,5 +1,5 @@
-export { usersRepository } from './users.repository.js';
-export { articlesRepository } from './articles.repository.js';
-export { productsRepository } from './products.repository.js';
-export { commentsRepository } from './comments.repository.js';
-export { likesRepository } from './likes.repository.js';
+export * from './users.repository.js';
+export * from './articles.repository.js';
+export * from './products.repository.js';
+export * from './comments.repository.js';
+export * from './likes.repository.js';

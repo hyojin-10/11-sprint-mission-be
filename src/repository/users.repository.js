@@ -1,43 +1,96 @@
-import { prisma } from '#db/prisma.js';
+export class UserRepository {
+  #prisma;
 
-// 유저 생성
-function createUser(data) {
-  return prisma.user.create({
-    data,
-  });
+  constructor({ prisma }) {
+    this.#prisma = prisma;
+  }
+
+  findAll() {
+    return this.#prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  findById(id) {
+    return this.#prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  findByEmail(email) {
+    return this.#prisma.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  findAuthByEmail(email) {
+    return this.#prisma.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        password: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  create(data) {
+    return this.#prisma.user.create({
+      data,
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  update(id, data) {
+    return this.#prisma.user.update({
+      where: {
+        id: Number(id),
+      },
+      data,
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  delete(id) {
+    return this.#prisma.user.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+  }
 }
-
-// 유저 조회
-function findUserById(id) {
-  return prisma.user.findUnique({
-    where: { id: Number(id) },
-  });
-}
-
-// 유저 목록 조회
-function findAllUsers() {
-  return prisma.user.findMany();
-}
-
-// 유저 정보 업데이트
-function updateUser(id, data) {
-  return prisma.user.update({
-    where: { id: Number(id) },
-    data,
-  });
-}
-
-// 유저 삭제
-function deleteUser(id) {
-  return prisma.user.delete({
-    where: { id: Number(id) },
-  });
-}
-
-export const usersRepository = {
-  createUser,
-  findUserById,
-  findAllUsers,
-  updateUser,
-  deleteUser,
-};
