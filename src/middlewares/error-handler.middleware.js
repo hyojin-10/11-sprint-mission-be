@@ -1,9 +1,5 @@
 import { Prisma } from '#generated/prisma/client.ts';
-import {
-  ERROR_MESSAGE,
-  HTTP_STATUS,
-  PRISMA_ERROR,
-} from '#constants';
+import { ERROR_MESSAGE, HTTP_STATUS, PRISMA_ERROR } from '#constants';
 import { HttpException } from '#exceptions';
 
 export const errorHandler = (err, req, res, _next) => {
@@ -13,7 +9,7 @@ export const errorHandler = (err, req, res, _next) => {
     return res.status(err.statusCode).json({
       success: false,
       message: err.message,
-      details: err.details,
+      ...(err.details && { details: err.details }),
     });
   }
 
@@ -26,17 +22,16 @@ export const errorHandler = (err, req, res, _next) => {
       });
     }
 
-    // P2025: Record not found
     if (err.code === PRISMA_ERROR.RECORD_NOT_FOUND) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({
         success: false,
-        message: ERROR_MESSAGE.NOT_FOUND,
+        message: ERROR_MESSAGE.RESOURCE_NOT_FOUND,
       });
     }
   }
 
-  // 처리되지 않은 모든 에러
   res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+    success: false,
     message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
   });
 };

@@ -1,16 +1,16 @@
-import { verifyToken } from '#utils';
 import { prisma } from '#db/prisma.js';
+import { TokenProvider } from '#providers';
 
-export const optionalAuthMiddleware = async (req, res, next) => {
+export const optionalAuth = async (req, res, next) => {
   try {
-    const {accessToken} = req.cookies;
+    const { accessToken } = req.cookies;
 
     if (!accessToken) {
       req.user = null;
       return next();
     }
 
-    const payload = verifyToken(accessToken, 'access');
+    const payload = TokenProvider.verifyAccessToken(accessToken);
 
     if (!payload) {
       req.user = null;
@@ -25,7 +25,7 @@ export const optionalAuthMiddleware = async (req, res, next) => {
     req.user = user || null;
     next();
   } catch (_error) {
-    req.user = null
-    next()
+    req.user = null;
+    next();
   }
-}
+};
