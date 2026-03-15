@@ -1,7 +1,7 @@
 import { ERROR_MESSAGE } from '#constants';
 import { z } from 'zod';
 
-export const signUpSchema = z.object({
+export const signupSchema = z.object({
   email: z.email(ERROR_MESSAGE.INVALID_EMAIL),
   password: z
     .string(ERROR_MESSAGE.PASSWORD_REQUIRED)
