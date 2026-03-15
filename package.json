@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "server.js",
+  "main": "./src/main.js",
   "imports": {
     "#generated/*": "./generated/*",
     "#config": "./src/config/config.js",
@@ -19,14 +19,14 @@
     "#providers": "./src/providers/index.js"
   },
   "scripts": {
-    "dev": "nodemon --env-file=./env/.env.development src/server.js",
-    "prod": "node --env-file=./env/.env.production src/server.js",
-    "prisma:migrate": "dotenv -e ./env/.env.development -- npx prisma migrate dev",
-    "prisma:studio": "dotenv -e ./env/.env.development -- npx prisma studio",
-    "prisma:generate": "dotenv -e ./env/.env.development -- npx prisma generate",
-    "seed": "node --env-file=./env/.env.development scripts/seed.js",
-    "format": "npx prettier --write .",
-    "format:check": "npx prettier --check ."
+    "dev": "nodemon --env-file=./env/.env.development ./src/main.js",
+    "prod": "node --env-file=./env/.env.production src/main.js",
+    "prisma:push": "dotenv -e ./env/.env.development -- prisma db push",
+    "prisma:studio": "dotenv -e ./env/.env.development -- prisma studio",
+    "prisma:generate": "dotenv -e ./env/.env.development -- prisma generate",
+    "seed": "pnpm run prisma:generate && node ./scripts/seed.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
   "author": "",
@@ -34,8 +34,10 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.4.0",
+    "awilix": "^13.0.3",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "dotenv-cli": "^11.0.0",
     "express": "^5.2.1",
